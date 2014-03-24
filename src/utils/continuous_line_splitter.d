@@ -33,7 +33,7 @@ class ContinuousLineSplitter(T) {
 
   public string getLine() {
     string line;
-    ulong idx = buffer.indexOf('\n');
+    auto idx = buffer.indexOf('\n');
     line = buffer[0 .. idx];
     buffer = buffer[(idx+1) .. $];
     return line;

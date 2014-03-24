@@ -91,10 +91,9 @@ void main(string[] args) {
   socket.send("BRICKMAKER\n");
 
   CLS cls = new CLS();
-  long l;
   char[1024] buf;
 
-  l = socket.receive(buf);
+  auto l = socket.receive(buf);
   cls.addText(buf[0 .. l]);
   while (!cls.hasLine()) {
     l = socket.receive(buf);
