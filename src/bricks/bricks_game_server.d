@@ -45,6 +45,7 @@ class BricksGameServer {
     this.outputFile = outputFile;
 
     server = new TcpSocket();
+    server.setOption(SocketOptionLevel.SOCKET, SocketOption.REUSEADDR, 1);
     server.bind(new InternetAddress(Socket.hostName, port));
     server.listen(2);
 
