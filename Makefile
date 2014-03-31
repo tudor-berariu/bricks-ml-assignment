@@ -40,6 +40,9 @@ AUX_OBJS=$(patsubst %.d,%.o,$(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(AUX_SRC)))
 EXEC=$(patsubst $(SRC_DIR)/%,%,$(patsubst %.d,%,$(MAIN_SRC)))
 RUNEXEC=$(lastword $(EXEC))
 
+#build should be the default target
+build: $(EXEC)
+
 # build object files from sources
 $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.d
 	mkdir -p $(patsubst %/$(lastword $(subst /, ,$@)),%,$@)
@@ -47,8 +50,6 @@ $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.d
 
 $(EXEC): %: $(OBJS) $(INTERFACES)
 	$(CC) $(CCFLAGS) -of$@ $(BUILD_DIR)/$@.o $(AUX_OBJS) $(LIB)
-
-build: $(EXEC)
 
 # Remove all Emacs temporary files, objects and executables
 clean:
