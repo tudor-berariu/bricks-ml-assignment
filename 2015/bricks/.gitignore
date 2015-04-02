@@ -7,3 +7,4 @@ build/*
 
 # Executables
 bricks-game-server
+bricks-game-player

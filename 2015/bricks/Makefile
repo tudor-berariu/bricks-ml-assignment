@@ -52,6 +52,7 @@ SRC=$(MAIN_SRC) $(AUX_SRC)
 
 # object files
 OBJS=$(patsubst %.cc,%.o,$(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC)))
+AUX_OBJS=$(patsubst %.cc,%.o,$(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(AUX_SRC)))
 
 # binaries
 EXEC=$(patsubst $(SRC_DIR)/%,%,$(patsubst %.cc,%,$(MAIN_SRC)))
@@ -65,14 +66,14 @@ debug: $(EXEC)
 # Link object files
 #  Add the following line to add executable to git ignore.
 
-$(EXEC): %: $(OBJS)
+$(EXEC): %: $(BUILD_DIR)/%.o $(AUX_OBJS)
 	(cat $(GITIGNORE) | grep -xq $@) || echo "$@" >> $(GITIGNORE)
-	$(CC) $(CCFLAGS) -o $@ $(OBJS) $(LIB)
+	$(CC) $(CCFLAGS) -o $@ $+ $(LIB)
 
 # Build object files from sources
 $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc $(HEADERS)
 	mkdir -p $(patsubst %/$(lastword $(subst /, ,$@)),%,$@)
-	$(CC) $(CCFLAGS) -c $(word 1,$+) -o $@ $(LIB)
+	$(CC) $(CCFLAGS) -I$(SRC_DIR) -c $(word 1,$+) -o $@ $(LIB)
 
 # Remove all Emacs temporary files, objects and executable
 clean:

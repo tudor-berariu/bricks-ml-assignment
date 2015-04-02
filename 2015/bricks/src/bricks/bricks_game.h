@@ -1,4 +1,4 @@
-// Copyright (C) 2014 Tudor Berariu
+// Copyright (C) 2015 Tudor Berariu
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -20,12 +20,45 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
+#ifndef __BRICKS_GAME_H__
+#define __BRICKS_GAME_H__
 
-int main(int argc, char * argv[])
-{
-  std::cout << "Hello, there! Good news: "
-            << argv[0]+2 << " works!"
-            << std::endl;
-  return 0;
-}
+#include <utility>
+#include <array>
+#include <vector>
+
+#include "bricks/brick_distribution.h"
+
+using namespace std;
+
+class BricksGame {
+public:
+  enum class GamePhase;
+  BricksGame(const vector<pair<char,float>>&, int, int);
+  void reset();
+  char getNextBrick();
+  string strBoard() const;
+  int placeBrick(int rotation, int left);
+  int score() const;
+  bool isOver() const;
+
+  friend ostream& operator<<(ostream&, const BricksGame&);
+
+  const int height;
+  const int width;
+
+private:
+  static const array<int, 5> scores;
+  vector<string> board;
+  static const char EMPTY;
+  static const char BRICK;
+
+  BrickDistribution bd;
+  GamePhase phase;
+  int totalScore;
+  Brick* nextBrick;
+  vector<int> heights;
+  vector<int> sums;
+};
+
+#endif
